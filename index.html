@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <title>انیمیشن ستاره</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: black;
+    }
+    canvas {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="starCanvas"></canvas>
+  <script>
+    const canvas = document.getElementById('starCanvas');
+    const ctx = canvas.getContext('2d');
+    let stars = [];
+    const numStars = 200;
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    function initStars() {
+      stars = [];
+      for (let i = 0; i < numStars; i++) {
+        stars.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          radius: Math.random() * 1.2,
+          speed: Math.random() * 0.5 + 0.2,
+        });
+      }
+    }
+    initStars();
+
+    function updateStars() {
+      for (let i = 0; i < stars.length; i++) {
+        stars[i].y += stars[i].speed;
+        if (stars[i].y > canvas.height) {
+          stars[i].y = 0;
+          stars[i].x = Math.random() * canvas.width;
+        }
+      }
+    }
+
+    function drawStars() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = 'white';
+      for (let i = 0; i < stars.length; i++) {
+        const star = stars[i];
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    function animate() {
+      updateStars();
+      drawStars();
+      requestAnimationFrame(animate);
+    }
+    animate();
+  </script>
+</body>
+</html>
